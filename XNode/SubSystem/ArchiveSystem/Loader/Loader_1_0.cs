@@ -39,10 +39,7 @@ namespace XNode.SubSystem.ArchiveSystem.Loader
                 if (nodeBaseData == null) continue;
                 // 创建节点实例
                 NodeBase? node;
-                if (nodeBaseData.NodeLibName == "Inner")
-                    node = NodeLibManager.Instance.CreateNode(nodeBaseData.TypeString);
-                else
-                    node = NodeLibManager.Instance.CreateNode(nodeBaseData.NodeLibName, nodeBaseData.TypeString);
+                node = NodeLibManager.Instance.CreateNode(nodeBaseData.TypeString);
                 // 创建节点失败，则跳过
                 if (node == null) continue;
                 // 初始化节点

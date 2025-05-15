@@ -5,9 +5,9 @@ using XLib.Node;
 using XLib.WPF.UI;
 using XLib.WPFControl;
 using XNode.AppTool;
+using XNode.Plugin.Nodes.TimerSystem;
 using XNode.SubSystem.NodeEditSystem.Define;
 using XNode.SubSystem.ResourceSystem;
-using XNode.SubSystem.TimerSystem;
 using XNode.SubSystem.WindowSystem;
 using ProgressBar = XLib.WPFControl.ProgressBar;
 

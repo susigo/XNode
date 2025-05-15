@@ -18,13 +18,13 @@ namespace XNode.SubSystem.OptionSystem
         #region 属性
 
         /// <summary>缓存路径</summary>
-        public string CachePath => _root + "Cache\\";
+        public string CachePath => _root + "\\..\\Cache\\";
 
         /// <summary>项目路径</summary>
-        public string ProjectPath => _root + "Project\\";
+        public string ProjectPath => _root + "\\..\\Project\\";
 
         /// <summary>节点库路径</summary>
-        public string NodeLibPath => _root + "NodeLib\\";
+        public string NodeLibPath => _root;
 
         #endregion
 
@@ -46,7 +46,8 @@ namespace XNode.SubSystem.OptionSystem
         #region 字段
 
         /// <summary>根路径</summary>
-        private readonly string _root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\XNode\\";
+        //private readonly string _root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\XNode\\";
+        private readonly string _root = Environment.CurrentDirectory;
 
         #endregion
     }

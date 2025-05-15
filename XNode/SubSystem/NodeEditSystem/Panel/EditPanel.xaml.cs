@@ -3,7 +3,7 @@ using XLib.Base;
 using XLib.Base.UIComponent;
 using XLib.Base.VirtualDisk;
 using XLib.Node;
-using XNode.SubSystem.EventSystem;
+using XNode.Plugin.Nodes.EventSystem;
 using XNode.SubSystem.NodeEditSystem.Define;
 using XNode.SubSystem.NodeEditSystem.Panel.Component;
 

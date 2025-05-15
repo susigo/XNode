@@ -1,14 +1,10 @@
 ﻿using System.IO;
 using System.Reflection;
+using System.Windows.Controls;
 using XLib.Base;
 using XLib.Base.Ex;
 using XLib.Base.VirtualDisk;
 using XLib.Node;
-using XNode.SubSystem.NodeLibSystem.Define.Data;
-using XNode.SubSystem.NodeLibSystem.Define.Drivers;
-using XNode.SubSystem.NodeLibSystem.Define.Events;
-using XNode.SubSystem.NodeLibSystem.Define.Flows;
-using XNode.SubSystem.NodeLibSystem.Define.Functions;
 using XNode.SubSystem.OptionSystem;
 
 namespace XNode.SubSystem.NodeLibSystem
@@ -36,7 +32,6 @@ namespace XNode.SubSystem.NodeLibSystem
 
         public void Init()
         {
-            BuildInnerNodeLib();
             LoadOutsideNodeLib();
         }
 
@@ -46,94 +41,21 @@ namespace XNode.SubSystem.NodeLibSystem
 
         #endregion
 
-        #region 公开方法
+        #region 注册型
 
-        /// <summary>
-        /// 创建节点
-        /// </summary>
         public NodeBase? CreateNode(string typeString)
         {
-            return typeString switch
-            {
-                nameof(Data_Int) => new Data_Int(),
-                nameof(Data_Double) => new Data_Double(),
-                nameof(Data_String) => new Data_String(),
-
-                nameof(FrameDriver) => new FrameDriver(),
-                nameof(TimerDriver) => new TimerDriver(),
-
-                nameof(Event_Keyboard) => new Event_Keyboard(),
-
-                nameof(Flow_If) => new Flow_If(),
-                nameof(Flow_LoopByCount) => new Flow_LoopByCount(),
-                nameof(Flow_While) => new Flow_While(),
-                nameof(Flow_Switch) => new Flow_Switch(),
-
-                nameof(Func_Compare) => new Func_Compare(),
-                nameof(Func_NumberToRatio) => new Func_NumberToRatio(),
-                nameof(Func_RatioToInt) => new Func_RatioToInt(),
-                nameof(Func_SendNetMessage) => new Func_SendNetMessage(),
-                nameof(Func_Delay) => new Func_Delay(),
-                nameof(Func_CreateThread) => new Func_CreateThread(),
-                nameof(Func_Sleep) => new Func_Sleep(),
-                nameof(Func_Log) => new Func_Log(),
-
-                _ => null,
-            };
+            //查找包含这个type的nodelib
+            var ttlib = NodeLibDict.Values.FirstOrDefault(x => x.ContainsNode(typeString));
+            if (ttlib == null) return null;
+            //创建节点
+            NodeBase? node = ttlib.CreateNode(typeString);
+            return node;
         }
-
-        /// <summary>
-        /// 创建节点
-        /// </summary>
-        public NodeBase? CreateNode(string libName, string typeString) =>
-            NodeLibDict.ContainsKey(libName) ? NodeLibDict[libName].CreateNode(typeString) : null;
 
         #endregion
 
         #region 私有方法
-
-        /// <summary>
-        /// 构建内置节点库
-        /// </summary>
-        private void BuildInnerNodeLib()
-        {
-            // 创建根文件夹
-            Folder 内置节点 = _nodeLibRoot.CreateFolder("内置节点".PackToList());
-            // 创建一级文件夹
-            Folder 驱动节点 = _nodeLibRoot.CreateFolder(内置节点, "驱动节点".PackToList());
-            Folder 事件节点 = _nodeLibRoot.CreateFolder(内置节点, "事件节点".PackToList());
-            Folder 函数节点 = _nodeLibRoot.CreateFolder(内置节点, "函数节点".PackToList());
-            Folder 流控制节点 = _nodeLibRoot.CreateFolder(内置节点, "流控制节点".PackToList());
-            Folder 数据节点 = _nodeLibRoot.CreateFolder(内置节点, "数据节点".PackToList());
-            // 创建二级文件夹
-            Folder 运算函数 = _nodeLibRoot.CreateFolder(函数节点.Path.AppendElement("运算函数"));
-            Folder 转换器 = _nodeLibRoot.CreateFolder(函数节点.Path.AppendElement("转换器"));
-            Folder 执行控制 = _nodeLibRoot.CreateFolder(函数节点.Path.AppendElement("执行控制"));
-            // 创建文件
-            _nodeLibRoot.CreateFile(数据节点, "整数", "nt", new NodeType<Data_Int>());
-            _nodeLibRoot.CreateFile(数据节点, "小数", "nt", new NodeType<Data_Double>());
-            _nodeLibRoot.CreateFile(数据节点, "字符串", "nt", new NodeType<Data_String>());
-
-            _nodeLibRoot.CreateFile(驱动节点, "帧驱动器", "nt", new NodeType<FrameDriver>());
-            _nodeLibRoot.CreateFile(驱动节点, "定时驱动器", "nt", new NodeType<TimerDriver>());
-
-            _nodeLibRoot.CreateFile(事件节点, "按键", "nt", new NodeType<Event_Keyboard>());
-
-            _nodeLibRoot.CreateFile(运算函数, "关系运算", "nt", new NodeType<Func_Compare>());
-            _nodeLibRoot.CreateFile(转换器, "比例转整数", "nt", new NodeType<Func_RatioToInt>());
-            _nodeLibRoot.CreateFile(转换器, "数值转比例", "nt", new NodeType<Func_NumberToRatio>());
-            _nodeLibRoot.CreateFile(函数节点, "发送网络消息", "nt", new NodeType<Func_SendNetMessage>());
-            _nodeLibRoot.CreateFile(函数节点, "日志", "nt", new NodeType<Func_Log>());
-
-            _nodeLibRoot.CreateFile(执行控制, "多线程执行", "nt", new NodeType<Func_CreateThread>());
-            _nodeLibRoot.CreateFile(执行控制, "延迟执行", "nt", new NodeType<Func_Delay>());
-            _nodeLibRoot.CreateFile(执行控制, "暂停执行", "nt", new NodeType<Func_Sleep>());
-
-            _nodeLibRoot.CreateFile(流控制节点, "判断", "nt", new NodeType<Flow_If>());
-            _nodeLibRoot.CreateFile(流控制节点, "计数循环", "nt", new NodeType<Flow_LoopByCount>());
-            _nodeLibRoot.CreateFile(流控制节点, "条件循环", "nt", new NodeType<Flow_While>());
-            _nodeLibRoot.CreateFile(流控制节点, "选择执行", "nt", new NodeType<Flow_Switch>());
-        }
 
         /// <summary>
         /// 加载外部节点库

@@ -228,6 +228,18 @@ namespace XLib.Base.VirtualDisk
             _fileIDBox.Reset();
         }
 
+        public File? FindFile(string name)
+        {
+            foreach (var item in FileDict.Values)
+            {
+                if (item.Name == name)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
         #endregion
 
         #region 私有方法

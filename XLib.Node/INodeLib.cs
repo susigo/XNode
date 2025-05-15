@@ -30,4 +30,12 @@ public interface INodeLib
     /// 创建节点
     /// </summary>
     public NodeBase? CreateNode(string typeString);
+    /// <summary>
+    /// 判断节点库是否包含某个节点
+    /// </summary>
+    /// <param name="typeString"></param>
+    /// <returns></returns>
+    public bool ContainsNode(string typeString);
+
+    //public bool RegisterNode(NodeType _type, string group = "");
 }
